@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -46,7 +47,7 @@ public class Room
         exits.put(direction, neighbor);
     }
 
-    public void setItem(String itemName, Item item){
+    public void addItem(String itemName, Item item){
         items.put(itemName,item);
     }
 

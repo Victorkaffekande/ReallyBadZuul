@@ -1,3 +1,6 @@
+import java.util.Collection;
+import java.util.Stack;
+
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -19,7 +22,8 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
-        
+    private Room lastRoom;
+    private Stack<Room> pastRooms;
     /**
      * Create the game and initialise its internal map.
      */
@@ -27,6 +31,7 @@ public class Game
     {
         createRooms();
         parser = new Parser();
+        pastRooms = new Stack<>();
     }
 
     /**
@@ -56,8 +61,8 @@ public class Game
         outside.setExit("south",lab);
         outside.setExit("west",pub);
 
-        outside.setItem("table",table);
-        outside.setItem("chair", chair);
+        outside.addItem("table",table);
+        outside.addItem("chair", chair);
 
         theater.setExit("north",outside);
         pub.setExit("east",outside);
@@ -66,6 +71,7 @@ public class Game
         office.setExit("west", lab);
 
         currentRoom = outside;  // start game outside
+        lastRoom = null;
     }
 
     /**
@@ -114,23 +120,29 @@ public class Game
         }
 
         String commandWord = command.getCommandWord();
-        if (commandWord.equals("help")) {
-            printHelp();
-        }
-        else if (commandWord.equals("go")) {
-            goRoom(command);
-        }
-        else if (commandWord.equals("quit")) {
-            wantToQuit = quit(command);
-        }
-        else if(commandWord.equals("look")) {
-            look();
-        }
-        else if(commandWord.equals("examine")){
-            examine(command);
+        switch (commandWord) {
+            case "help" -> printHelp();
+            case "go" -> goRoom(command);
+            case "quit" -> wantToQuit = quit(command);
+            case "look" -> look();
+            case "examine" -> examine(command);
+            case "back" -> goBack();
         }
 
         return wantToQuit;
+    }
+
+    /**
+     * Returns the player to their previous room
+     */
+    private void goBack() {
+        if (!pastRooms.empty()){
+            currentRoom = pastRooms.pop();
+            printLocationInfo();
+        }
+        else{
+            System.out.println("You cannot go further back");
+        }
     }
 
     // implementations of user commands:
@@ -169,6 +181,7 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
+            pastRooms.push(currentRoom);
             currentRoom = nextRoom;
             printLocationInfo();
         }
