@@ -19,6 +19,8 @@ public class Room
 {
     private String description;
     private HashMap<String, Room> exits;
+    private HashMap<String, Item> items;
+    private boolean containsItems;
 
     /**
      * Create a room described "description". Initially, it has
@@ -29,7 +31,9 @@ public class Room
     public Room(String description) 
     {
         this.description = description;
-        exits = new HashMap<String, Room>();
+        exits = new HashMap<>();
+        items = new HashMap<>();
+        containsItems = false;
     }
 
     /**
@@ -42,6 +46,10 @@ public class Room
         exits.put(direction, neighbor);
     }
 
+    public void setItem(String itemName, Item item){
+        items.put(itemName,item);
+    }
+
     /**
      * Return the room that is reached if we go from this
      * room in direction "direction "If there is no room in
@@ -50,6 +58,10 @@ public class Room
     public Room getExit(String direction)
     {
         return exits.get(direction);
+    }
+
+    public Item getItem(String item){
+        return items.get(item);
     }
 
     /**
@@ -66,6 +78,16 @@ public class Room
         }
         return returnString;
     }
+
+    public String getItemsString(){
+        String returnString = "Items:";
+        Set<String> keys = items.keySet();
+        for(String item : keys) {
+            returnString += " " + item;
+        }
+        return returnString;
+    }
+
     /**
      * Return the description of the room (the one that was
      * defined in the constructor).
@@ -85,5 +107,10 @@ public class Room
     {
         return "You are " + description + ".\n" + getExitString();
     }
+
+    public boolean RoomHasItems(){
+        containsItems = items.size() != 0;
+        return containsItems;
+    } 
 
 }

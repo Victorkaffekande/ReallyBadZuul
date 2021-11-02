@@ -43,11 +43,22 @@ public class Game
         lab = new Room("in a computing lab");
         office = new Room("in the computing admin office");
         cellar = new Room("in the dank cellar");
+
+        // create items
+        Item table, chair;
+
+        table = new Item("Table",20,"A plate with four legs");
+        chair = new Item("Chair",5,"looks like a nice place to rest");
+
         
         // initialise room exits
         outside.setExit("east",theater);
         outside.setExit("south",lab);
         outside.setExit("west",pub);
+
+        outside.setItem("table",table);
+        outside.setItem("chair", chair);
+
         theater.setExit("north",outside);
         pub.setExit("east",outside);
         lab.setExit("north",outside);
@@ -112,6 +123,12 @@ public class Game
         else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
         }
+        else if(commandWord.equals("look")) {
+            look();
+        }
+        else if(commandWord.equals("examine")){
+            examine(command);
+        }
 
         return wantToQuit;
     }
@@ -129,7 +146,7 @@ public class Game
         System.out.println("around at the university.");
         System.out.println();
         System.out.println("Your command words are:");
-        System.out.println("   go quit help");
+        System.out.println(parser.showCommands());
     }
 
     /** 
@@ -154,6 +171,38 @@ public class Game
         else {
             currentRoom = nextRoom;
             printLocationInfo();
+        }
+    }
+
+    /**
+     * look command
+     */
+    private void look()
+    {
+        if (currentRoom.RoomHasItems()){
+            System.out.println(currentRoom.getItemsString());
+        }
+        else
+            System.out.println("This room is empty");
+    }
+
+    private void examine(Command command){
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know what to examine
+            System.out.println("Examine what?");
+            return;
+        }
+
+        String item = command.getSecondWord();
+
+        // Try to leave current room.
+        Item pickedItem = currentRoom.getItem(item);
+
+        if (pickedItem == null) {
+            System.out.println("there is no " + item + " in this room");
+        }
+        else {
+            System.out.println(pickedItem.getDescription());
         }
     }
 
