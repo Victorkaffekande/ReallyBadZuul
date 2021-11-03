@@ -1,4 +1,4 @@
-import java.util.Collection;
+
 import java.util.HashMap;
 import java.util.Set;
 
@@ -51,6 +51,10 @@ public class Room
         items.put(itemName,item);
     }
 
+    public void deleteItem(String itemName){
+        items.remove(itemName);
+    }
+
     /**
      * Return the room that is reached if we go from this
      * room in direction "direction "If there is no room in
@@ -59,10 +63,6 @@ public class Room
     public Room getExit(String direction)
     {
         return exits.get(direction);
-    }
-
-    public Item getItem(String item){
-        return items.get(item);
     }
 
     /**
@@ -109,9 +109,31 @@ public class Room
         return "You are " + description + ".\n" + getExitString();
     }
 
+    /**
+     * checks if the room contains items
+     * @return true if the room has items in it
+     */
     public boolean RoomHasItems(){
-        containsItems = items.size() != 0;
+        containsItems = !items.isEmpty();
         return containsItems;
-    } 
 
+    }
+
+    /**
+     * checks if a specific item is in the room
+     * @param itemName the item you are lookinmg for
+     * @return true if the item is in the room
+     */
+    public boolean containsItem(String itemName){
+        return items.containsKey(itemName);
+    }
+
+    /**
+     *
+     * @param itemName the item you are looking for
+     * @return the item
+     */
+    public Item getItem(String itemName) {
+        return items.get(itemName);
+    }
 }

@@ -20,18 +20,17 @@ import java.util.Stack;
 
 public class Game 
 {
+    private Player player;
     private Parser parser;
-    private Room currentRoom;
-    private Room lastRoom;
-    private Stack<Room> pastRooms;
+    Room outside, theater, pub, lab, office, cellar;
     /**
      * Create the game and initialise its internal map.
      */
     public Game() 
     {
         createRooms();
+        createPlayer();
         parser = new Parser();
-        pastRooms = new Stack<>();
     }
 
     /**
@@ -39,8 +38,6 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office, cellar;
-      
         // create the rooms
         outside = new Room("outside the main entrance of the university");
         theater = new Room("in a lecture theater");
@@ -49,30 +46,35 @@ public class Game
         office = new Room("in the computing admin office");
         cellar = new Room("in the dank cellar");
 
-        // create items
-        Item table, chair;
-
-        table = new Item("Table",20,"A plate with four legs");
-        chair = new Item("Chair",5,"looks like a nice place to rest");
-
-        
         // initialise room exits
         outside.setExit("east",theater);
         outside.setExit("south",lab);
         outside.setExit("west",pub);
-
-        outside.addItem("table",table);
-        outside.addItem("chair", chair);
-
         theater.setExit("north",outside);
         pub.setExit("east",outside);
         lab.setExit("north",outside);
         lab.setExit("east", office);
         office.setExit("west", lab);
 
-        currentRoom = outside;  // start game outside
-        lastRoom = null;
+        // create items
+        Item table, chair, knife, wallet;
+
+        table = new Item("table",20,"A plate with four legs",false);
+        chair = new Item("chair",5,"looks like a nice place to rest",true);
+        knife = new Item("knife", 2,"looks sharp",true);
+        wallet = new Item("wallet",4,"Ez money",true);
+        //add items
+        outside.addItem("table",table);
+        outside.addItem("chair", chair);
+        outside.addItem("knife",knife);
+        outside.addItem("wallet",wallet);
     }
+
+    private void createPlayer(){
+        player = new Player(10);
+        player.setCurrentRoom(outside);  // start game outside
+    }
+
 
     /**
      *  Main play routine.  Loops until end of play.
@@ -102,7 +104,7 @@ public class Game
         System.out.println("World of Zuul is a new, incredibly boring adventure game.");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
-        printLocationInfo();
+        player.printLocationInfo();
     }
 
     /**
@@ -122,27 +124,17 @@ public class Game
         String commandWord = command.getCommandWord();
         switch (commandWord) {
             case "help" -> printHelp();
-            case "go" -> goRoom(command);
+            case "go" -> player.goRoom(command);
             case "quit" -> wantToQuit = quit(command);
-            case "look" -> look();
-            case "examine" -> examine(command);
-            case "back" -> goBack();
+            case "look" -> player.look();
+            case "examine" -> player.examine(command);
+            case "back" -> player.goBack();
+            case "take" -> player.pickUpItem(command);
+            case "inventory" -> player.checkInventory();
+            case "drop" -> player.dropItem(command);
         }
 
         return wantToQuit;
-    }
-
-    /**
-     * Returns the player to their previous room
-     */
-    private void goBack() {
-        if (!pastRooms.empty()){
-            currentRoom = pastRooms.pop();
-            printLocationInfo();
-        }
-        else{
-            System.out.println("You cannot go further back");
-        }
     }
 
     // implementations of user commands:
@@ -162,64 +154,6 @@ public class Game
     }
 
     /** 
-     * Try to go in one direction. If there is an exit, enter
-     * the new room, otherwise print an error message.
-     */
-    private void goRoom(Command command) 
-    {
-        if(!command.hasSecondWord()) {
-            // if there is no second word, we don't know where to go...
-            System.out.println("Go where?");
-            return;
-        }
-
-        String direction = command.getSecondWord();
-
-        // Try to leave current room.
-        Room nextRoom = currentRoom.getExit(direction);
-        if (nextRoom == null) {
-            System.out.println("There is no door!");
-        }
-        else {
-            pastRooms.push(currentRoom);
-            currentRoom = nextRoom;
-            printLocationInfo();
-        }
-    }
-
-    /**
-     * look command
-     */
-    private void look()
-    {
-        if (currentRoom.RoomHasItems()){
-            System.out.println(currentRoom.getItemsString());
-        }
-        else
-            System.out.println("This room is empty");
-    }
-
-    private void examine(Command command){
-        if(!command.hasSecondWord()) {
-            // if there is no second word, we don't know what to examine
-            System.out.println("Examine what?");
-            return;
-        }
-
-        String item = command.getSecondWord();
-
-        // Try to leave current room.
-        Item pickedItem = currentRoom.getItem(item);
-
-        if (pickedItem == null) {
-            System.out.println("there is no " + item + " in this room");
-        }
-        else {
-            System.out.println(pickedItem.getDescription());
-        }
-    }
-
-    /** 
      * "Quit" was entered. Check the rest of the command to see
      * whether we really quit the game.
      * @return true, if this command quits the game, false otherwise.
@@ -235,8 +169,5 @@ public class Game
         }
     }
 
-    private void printLocationInfo()
-    {
-        System.out.println(currentRoom.getLongDescription());
-    }
+
 }

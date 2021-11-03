@@ -2,8 +2,10 @@ public class Item {
     private String itemName;
     private int weight;
     private String description;
+    private boolean canBePickedUp;
 
-    public Item(String itemName, int weight, String description){
+    public Item(String itemName, int weight, String description,boolean canBePickedUp){
+       this.canBePickedUp = canBePickedUp;
        this.itemName = itemName;
        this.weight = weight;
        this.description = description;
@@ -21,5 +23,13 @@ public class Item {
         return description;
     }
 
+    public String getLongDescription(){
+        return "Name: " + getItemName() +"\n" +
+                "Weight: " + getWeight() + "\n" +
+                "Description: " + getDescription();
+    }
 
+    public boolean canBePickedUp(){
+        return canBePickedUp;
+    }
 }
