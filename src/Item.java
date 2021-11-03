@@ -1,8 +1,8 @@
 public class Item {
-    private String itemName;
-    private int weight;
-    private String description;
-    private boolean canBePickedUp;
+    private final String itemName;
+    private final int weight;
+    private final String description;
+    private final boolean canBePickedUp;
 
     public Item(String itemName, int weight, String description,boolean canBePickedUp){
        this.canBePickedUp = canBePickedUp;
