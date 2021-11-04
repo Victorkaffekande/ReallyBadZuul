@@ -118,10 +118,9 @@ public class Game
     {
         boolean wantToQuit = false;
 
-       CommandWord commandWord = command.getCommandWord();
-
+       CommandWord commandWord = CommandWord.valueOf(command.getCommandWord());
         switch (commandWord) {
-            case UNKNOWN -> System.out.println("I don't know what you mean...");
+            //case UNKNOWN -> System.out.println("I don't know what you mean...");
             case HELP -> printHelp();
             case GO -> player.goRoom(command);
             case QUIT -> wantToQuit = quit(command);
