@@ -3,10 +3,7 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class Player {
-    /**
-     * inv
-     * look in inv
-     */
+
     private int maxWeight;
     private int weight;
     private Room currentRoom;
