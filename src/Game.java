@@ -57,17 +57,19 @@ public class Game
         office.setExit("west", lab);
 
         // create items
-        Item table, chair, knife, wallet;
+        Item table, chair, knife, wallet, cookie;
 
         table = new Item("table",20,"A plate with four legs",false);
         chair = new Item("chair",5,"looks like a nice place to rest",true);
         knife = new Item("knife", 2,"looks sharp",true);
         wallet = new Item("wallet",4,"Ez money",true);
+        cookie = new Item("cookie", 2,"Eat me! +5 to max carry weight",false);
         //add items
         outside.addItem("table",table);
         outside.addItem("chair", chair);
         outside.addItem("knife",knife);
         outside.addItem("wallet",wallet);
+        outside.addItem("cookie",cookie);
     }
 
     private void createPlayer(){
@@ -116,22 +118,23 @@ public class Game
     {
         boolean wantToQuit = false;
 
-        if(command.isUnknown()) {
-            System.out.println("I don't know what you mean...");
-            return false;
-        }
+       CommandWord commandWord = command.getCommandWord();
 
-        String commandWord = command.getCommandWord();
         switch (commandWord) {
-            case "help" -> printHelp();
-            case "go" -> player.goRoom(command);
-            case "quit" -> wantToQuit = quit(command);
+            case UNKNOWN -> System.out.println("I don't know what you mean...");
+            case HELP -> printHelp();
+            case GO -> player.goRoom(command);
+            case QUIT -> wantToQuit = quit(command);
+            /*
             case "look" -> player.look();
             case "examine" -> player.examine(command);
             case "back" -> player.goBack();
             case "take" -> player.pickUpItem(command);
             case "inventory" -> player.checkInventory();
             case "drop" -> player.dropItem(command);
+            case "eat" -> player.eatCookie(command);
+
+             */
         }
 
         return wantToQuit;
@@ -146,9 +149,6 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
-        System.out.println();
         System.out.println("Your command words are:");
         System.out.println(parser.showCommands());
     }

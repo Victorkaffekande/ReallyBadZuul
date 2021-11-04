@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This class is part of the "World of Zuul" application. 
@@ -13,30 +15,50 @@ import java.util.Arrays;
 
 public class CommandWords
 {
-    // a constant array that holds all valid command words
-    private static final String[] validCommands = {
-        "go", "quit", "help" ,"look", "examine", "back", "take", "drop", "inventory"
-    };
+    private HashMap<String,CommandWord> validCommands;
 
     /**
      * Constructor - initialise the command words.
      */
     public CommandWords()
     {
-        // nothing to do at the moment...
+        //add command words to valid commands
+        validCommands = new HashMap<String,CommandWord>();
+        validCommands.put("help", CommandWord.HELP);
+        validCommands.put("quit", CommandWord.QUIT);
+        validCommands.put("go", CommandWord.GO);
+        validCommands.put("?", CommandWord.UNKNOWN);
+
+        /*
+        for(CommandWord command : CommandWord.values()) {
+            if(command != CommandWord.UNKNOWN) {
+                validCommands.put(command.toString(), command);
+            }
+        }
+         */
     }
 
+
+
     /**
-     * Check whether a given String is a valid command word. 
+     * Check whether a given String is a valid command word.
      * @return true if a given string is a valid command,
      * false if it isn't.
      */
     public boolean isCommand(String aString)
     {
+        /*
         for(int i = 0; i < validCommands.length; i++) {
             if(validCommands[i].equals(aString))
                 return true;
         }
+        /*
+        for (String command: validCommands.keySet()) {
+            if (Objects.equals(command, aString)){
+                return true;
+            }
+        }
+*/
         // if we get here, the string was not found in the commands
         return false;
     }
@@ -47,7 +69,7 @@ public class CommandWords
     public String getCommandList()
     {
         StringBuilder output= new StringBuilder();
-        for (String command: validCommands){
+        for (String command: validCommands.keySet()){
                output.append(command.toString() + ", ");
 
         }

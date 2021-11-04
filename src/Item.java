@@ -32,4 +32,5 @@ public class Item {
     public boolean canBePickedUp(){
         return canBePickedUp;
     }
+
 }

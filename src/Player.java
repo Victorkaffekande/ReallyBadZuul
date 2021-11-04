@@ -1,5 +1,6 @@
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Stack;
 
 public class Player {
@@ -173,4 +174,23 @@ public class Player {
     }
 
 
+    public void eatCookie(Command command) {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know what to examine
+            System.out.println("There is no cookie to eat");
+            return;
+        }
+
+        String itemName = command.getSecondWord();
+
+        if (currentRoom.containsItem(itemName) && Objects.equals(itemName, "cookie")){
+            addMaxWeight(5);
+            currentRoom.deleteItem(itemName);
+            System.out.println("you eat the cookie off the ground, ew");
+        }
+    }
+
+    public void addMaxWeight(int inputWeight){
+        maxWeight += inputWeight;
+    }
 }
