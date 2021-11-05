@@ -189,7 +189,6 @@ public class Player {
             System.out.println("you eat the cookie off the ground, ew");
         }
     }
-
     public void addMaxWeight(int inputWeight){
         maxWeight += inputWeight;
     }
