@@ -81,12 +81,12 @@ public class Room
     }
 
     public String getItemsString(){
-        String returnString = "Items:";
+        StringBuilder returnString = new StringBuilder("Items: ");
         Set<String> keys = items.keySet();
         for(String item : keys) {
-            returnString += " " + item;
+            returnString.append(item + ", ");
         }
-        return returnString;
+        return returnString.delete(returnString.length()-2,returnString.length()).toString();
     }
 
     /**

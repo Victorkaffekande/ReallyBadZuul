@@ -6,6 +6,6 @@
  * @version 2011.08.10
  */
 public enum CommandWord {
-    GO, QUIT, HELP, UNKNOWN;
+    GO, QUIT, HELP, LOOK, EXAMINE, EAT, BACK, TAKE, DROP, INVENTORY, UNKNOWN;
 
 }

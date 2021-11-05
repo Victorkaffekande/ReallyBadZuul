@@ -118,22 +118,22 @@ public class Game
     {
         boolean wantToQuit = false;
 
-       CommandWord commandWord = CommandWord.valueOf(command.getCommandWord());
+       CommandWord commandWord = command.getCommandWord();
+       if (commandWord == null){
+           commandWord = CommandWord.UNKNOWN;
+       }
         switch (commandWord) {
-            //case UNKNOWN -> System.out.println("I don't know what you mean...");
+            case UNKNOWN -> System.out.println("I don't know what you mean...");
             case HELP -> printHelp();
             case GO -> player.goRoom(command);
             case QUIT -> wantToQuit = quit(command);
-            /*
-            case "look" -> player.look();
-            case "examine" -> player.examine(command);
-            case "back" -> player.goBack();
-            case "take" -> player.pickUpItem(command);
-            case "inventory" -> player.checkInventory();
-            case "drop" -> player.dropItem(command);
-            case "eat" -> player.eatCookie(command);
-
-             */
+            case LOOK -> player.look();
+            case EXAMINE -> player.examine(command);
+            case BACK -> player.goBack();
+            case TAKE -> player.pickUpItem(command);
+            case INVENTORY -> player.checkInventory();
+            case DROP -> player.dropItem(command);
+            case EAT -> player.eatCookie(command);
         }
 
         return wantToQuit;
