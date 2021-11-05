@@ -22,6 +22,13 @@ public class CommandWords
      */
     public CommandWords()
     {
+        validCommands = new HashMap<String, CommandWord>();
+        for(CommandWord command : CommandWord.values()) {
+            if(command != CommandWord.UNKNOWN) {
+                validCommands.put(command.toString(), command);
+            }
+        }
+        /*
         //add command words to valid commands
         validCommands = new HashMap<String,CommandWord>();
         validCommands.put("help", CommandWord.HELP);
@@ -32,15 +39,10 @@ public class CommandWords
         validCommands.put("inventory", CommandWord.INVENTORY);
         validCommands.put("look", CommandWord.LOOK);
         validCommands.put("eat", CommandWord.EAT);
+        validCommands.put("examine", CommandWord.EXAMINE);
 
         validCommands.put("?", CommandWord.UNKNOWN);
 
-        /*
-        for(CommandWord command : CommandWord.values()) {
-            if(command != CommandWord.UNKNOWN) {
-                validCommands.put(command.toString(), command);
-            }
-        }
          */
     }
 
@@ -83,7 +85,7 @@ public class CommandWords
     {
         StringBuilder output= new StringBuilder();
         for (String command: validCommands.keySet()){
-               output.append(command.toString() + ", ");
+               output.append(command.toString()).append(", ");
 
         }
         return output.delete(output.length()-2,output.length()).toString();

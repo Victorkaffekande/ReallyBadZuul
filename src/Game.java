@@ -65,11 +65,11 @@ public class Game
         wallet = new Item("wallet",4,"Ez money",true);
         cookie = new Item("cookie", 2,"Eat me! +5 to max carry weight",false);
         //add items
-        outside.addItem("table",table);
-        outside.addItem("chair", chair);
-        outside.addItem("knife",knife);
-        outside.addItem("wallet",wallet);
-        outside.addItem("cookie",cookie);
+        outside.addItem(table.getItemName(), table);
+        outside.addItem(chair.getItemName(), chair);
+        outside.addItem(knife.getItemName(), knife);
+        outside.addItem(wallet.getItemName(), wallet);
+        outside.addItem(cookie.getItemName(), cookie);
     }
 
     private void createPlayer(){
@@ -87,7 +87,6 @@ public class Game
 
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
-                
         boolean finished = false;
         while (! finished) {
             Command command = parser.getCommand();
@@ -101,10 +100,9 @@ public class Game
      */
     private void printWelcome()
     {
-        System.out.println();
+        CommandWords commandWords = new CommandWords();
         System.out.println("Welcome to the World of Zuul!");
-        System.out.println("World of Zuul is a new, incredibly boring adventure game.");
-        System.out.println("Type 'help' if you need help.");
+        System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println();
         player.printLocationInfo();
     }
